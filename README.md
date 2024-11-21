@@ -1,8 +1,8 @@
 # Day 4 - 使用指令建立元件 題目
 
-![題目示意圖](image.png)
+![題目示意圖](https://hackmd.io/_uploads/BklbBfHb1g.png)
 
-請 clone 這一份模板， 完成以下條件 :
+請 clone 這一份[模板](https://github.com/jasonlu0525/nuxt3-live-question/tree/day4-component)， 完成以下條件 :
 - 將 components/ProductCard.vue  卡片的圖片、標題、價格、按鈕拆分成單獨的元件 ( 如圖 ) ，並且在 product/card 資料夾下進行管理。
 - ProductCard.vue 的 CSS 需要跟元件一起拆分。props 的資料需要傳入元件。
 - 在 pages/index.vue 的模板可以正常顯示卡片元件。
