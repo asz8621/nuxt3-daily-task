@@ -1,3 +1,5 @@
+# Day 6 - NuxtLink 與 路由基礎配置 題目
+
 ![image](https://hackmd.io/_uploads/r1uXtDnb1l.png)
 
 請 fork 這一份 [模板](https://github.com/jasonlu0525/nuxt3-live-question/tree/day6-router)，完成以下條件 :
