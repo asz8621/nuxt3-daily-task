@@ -2,17 +2,53 @@
 const { $swal } = useNuxtApp();
 
 // 表單格式
-const userRegisteObject = ref({
-	name: '',
-	email: '',
-	password: '',
-	phone: '',
-	birthday: '',
-	address: {
-		zipcode: '',
-		detail: '',
-	},
-});
+const userRegisterObject = ref({});
+
+// 初始化表單資料
+const initUserData = () => {
+	userRegisterObject.value = {
+		name: '',
+		email: '',
+		password: '',
+		phone: '',
+		birthday: '',
+		address: {
+			zipcode: '',
+			detail: '',
+		},
+	};
+};
+
+initUserData();
+
+const register = async () => {
+	try {
+		const res = await $fetch('/api/v1/user/signup', {
+			method: 'POST',
+			baseURL: 'https://nuxr3.zeabur.app',
+			body: userRegisterObject.value,
+		});
+		$swal.fire({
+			position: 'center',
+			icon: 'success',
+			title: '註冊成功',
+			showConfirmButton: false,
+			timer: 3000,
+		});
+		initUserData();
+		console.log(res);
+	} catch (error) {
+		$swal.fire({
+			position: 'center',
+			icon: 'error',
+			title: '註冊失敗',
+			text: error.response._data.message,
+			showConfirmButton: false,
+			timer: 3000,
+		});
+	}
+};
+
 // 使用 sweetAlert2 套件顯示訊息
 // $swal.fire({
 //   position: "center",
@@ -30,18 +66,19 @@ const userRegisteObject = ref({
 				<div class="col-12 col-md-11 col-lg-8 col-xl-7 col-xxl-6">
 					<div class="bg-white p-4 p-md-5 rounded shadow-sm">
 						<h2 class="h3 mb-4">會員註冊</h2>
-						<form @submit.prevent="">
+						<form @submit.prevent="register">
 							<div class="form-floating mb-4">
 								<input
 									type="text"
 									class="form-control"
 									id="firstName"
 									placeholder="王小明"
+									v-model="userRegisterObject.name"
 									required
 								/>
-								<label for="firstName"
-									>姓名 <span class="text-danger">*</span></label
-								>
+								<label for="firstName">
+									姓名 <span class="text-danger">*</span>
+								</label>
 							</div>
 
 							<div class="form-floating mb-4">
@@ -51,11 +88,12 @@ const userRegisteObject = ref({
 									id="email"
 									placeholder="example@gmail.com"
 									pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+									v-model="userRegisterObject.email"
 									required
 								/>
-								<label for="email"
-									>信箱 <span class="text-danger">*</span></label
-								>
+								<label for="email">
+									信箱 <span class="text-danger">*</span>
+								</label>
 							</div>
 
 							<div class="form-floating mb-4">
@@ -65,11 +103,12 @@ const userRegisteObject = ref({
 									id="password"
 									placeholder="請輸入 8 碼以上密碼"
 									pattern=".{8,}"
+									v-model="userRegisterObject.password"
 									required
 								/>
-								<label for="password"
-									>密碼 <span class="text-danger">*</span></label
-								>
+								<label for="password">
+									密碼 <span class="text-danger">*</span>
+								</label>
 							</div>
 
 							<div class="form-floating mb-4">
@@ -79,6 +118,7 @@ const userRegisteObject = ref({
 									id="phone"
 									placeholder="0912345678"
 									pattern="(\+886|0)?9\d{8}|(\+886|0)?2\d{8}|\d{3}-\d{4}-\d{4}"
+									v-model="userRegisterObject.phone"
 									required
 								/>
 								<label for="phone">電話</label>
@@ -89,6 +129,7 @@ const userRegisteObject = ref({
 									type="date"
 									class="form-control"
 									id="dateInput"
+									v-model="userRegisterObject.birthday"
 									required
 								/>
 								<label for="dateInput">出生年月日</label>
@@ -103,6 +144,7 @@ const userRegisteObject = ref({
 											id="zipcode"
 											placeholder="100"
 											pattern="\d{3,}"
+											v-model="userRegisterObject.address.zipcode"
 											required
 										/>
 										<label for="zipcode">郵遞區號</label>
@@ -115,6 +157,7 @@ const userRegisteObject = ref({
 											class="form-control"
 											id="address"
 											placeholder="台北市中正區重慶南路一段"
+											v-model="userRegisterObject.address.detail"
 											required
 										/>
 										<label for="address">詳細地址</label>
