@@ -2,23 +2,56 @@
 const route = useRoute();
 const router = useRouter();
 const roomsList = ref([]);
-
 const apiUrl = 'https://nuxr3.zeabur.app/api/v1/rooms';
 
-fetch(apiUrl)
-	.then((res) => {
-		if (!res.ok) {
-			throw new Error('取得房型資料失敗');
-		}
-		return res.json();
-	})
-	.then((data) => {
+// useAsyncData
+const { data: roomsData } = await useAsyncData('rooms', async () => {
+	try {
+		const data = await $fetch(apiUrl);
 		const { result } = data;
-		roomsList.value = result;
-	})
-	.catch((error) => {
+		return result;
+	} catch (error) {
 		console.error('發生錯誤:', error);
-	});
+	}
+});
+
+if (roomsData.value) {
+	roomsList.value = roomsData.value;
+}
+
+// // useFetch
+// const { data: roomsData } = await useFetch('/rooms', {
+// 	baseURL: 'https://nuxr3.zeabur.app/api/v1',
+// 	transform: (response) => {
+// 		const { result } = response;
+// 		return result;
+// 	},
+// 	onResponseError({ response }) {
+// 		const { message } = response._data;
+// 		console.error('Error:', message);
+// 		router.push('/');
+// 	},
+// });
+
+// if (roomsData.value) {
+// 	roomsList.value = roomsData.value;
+// }
+
+// // fetch
+// fetch(apiUrl)
+// 	.then((res) => {
+// 		if (!res.ok) {
+// 			throw new Error('取得房型資料失敗');
+// 		}
+// 		return res.json();
+// 	})
+// 	.then((data) => {
+// 		const { result } = data;
+// 		roomsList.value = result;
+// 	})
+// 	.catch((error) => {
+// 		console.error('發生錯誤:', error);
+// 	});
 </script>
 
 <template>
